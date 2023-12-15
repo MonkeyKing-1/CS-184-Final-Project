@@ -14,9 +14,10 @@ def get_next_investment(position):
     upside = -downside * (1 - prob) / prob * (0.5 + 1.5 * np.random.uniform())
     return (position, prob, upside, downside)
 
-class InfLinInvestorGameEnv(gym.Env):
-    def __init__(self, gamma):
-        super(InfLinInvestorGameEnv, self).__init__()
+class InfGenInvestorGameEnv(gym.Env):
+    def __init__(self, gamma, func):
+        super(InfGenInvestorGameEnv, self).__init__()
+        self.func = func
         self.gamma = gamma
         self.start_pos = 1000.0
         self.cur_pos = self.start_pos
@@ -48,16 +49,19 @@ class InfLinInvestorGameEnv(gym.Env):
         if action == 1:
             samp = np.random.uniform()
             if samp > self.prob:
-                reward = self.downside
+                reward = self.func(self.cur_pos, self.downside)
+                diff = self.downside
             else:
-                reward = self.upside
+                reward = self.func(self.cur_pos, self.upside)
+                diff = self.upside
         else:
             reward = 0
-        self.cur_pos += reward
+            diff = 0
+        self.cur_pos += diff
         self.round += 1
         # print(self.round, self.max_rounds)
         # Reward function
-        if self.round == self.max_rounds or self.cur_pos < 10.00:
+        if self.round == self.max_rounds:
             done = True
         else:
             done = False

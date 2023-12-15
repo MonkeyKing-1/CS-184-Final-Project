@@ -1,16 +1,19 @@
 import gym
-from environment import InvestorGameEnv
 import pygame
+from environments.finlinenvironment import FinLinInvestorGameEnv
+from environments.inflinenvironment import InfLinInvestorGameEnv
+from environments.finlogenvironment import FinLogInvestorGameEnv
+from environments.inflogenvironment import InfLogInvestorGameEnv
 
 # Register the environment
 gym.register(
-    id='InvestorGameEnv-v0',
-    entry_point='environment:InvestorGameEnv', 
+    id='InfLinInvestorGameEnv-v0',
+    entry_point='environments.inflinenvironment:InfLinInvestorGameEnv', 
     kwargs={'gamma': None} 
 )
 
 # Test the environment
-env = gym.make('InvestorGameEnv-v0',max_rounds = 20)
+env = gym.make('InfLinInvestorGameEnv-v0', gamma = 0.1)
 obs = env.reset()
 env.render()
 

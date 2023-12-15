@@ -166,6 +166,7 @@ if __name__ == '__main__':
         inflin = infinite_linear(num_runs)
         plot_log_scores("infinite log utility", inflog)
         plot_log_scores("infinite linear utility", inflin)
+        print(np.min(inflog))
         plt.show()
         logwins = 0
         basewins = 0
