@@ -129,7 +129,7 @@ if __name__ == '__main__':
     theta, episode_rewards = train(env, N=1000, T=100, delta=1e-2)
     episode_rewards = np.array(episode_rewards)
     baseline = np.zeros_like(episode_rewards)
-    f = open("params/infgen-" + model + ".txt", "w")
+    f = open("params/infgen20-" + model + ".txt", "w")
     for i in theta:
         f.write(str(i[0]))
         f.write(" ")

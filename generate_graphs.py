@@ -48,7 +48,7 @@ def act_lb(theta, state, lb):
     return act
 
 def infinite_gen(N, model, func):
-    theta = np.loadtxt("params/infgen-" + model + ".txt")
+    theta = np.loadtxt("params/infgen20-" + model + ".txt")
     theta = theta.reshape((len(theta), 1))
     env = gym.make('InfGenInvestorGameEnv-v0', gamma = 0.1, func = func)
     env.seed(1234)
@@ -148,7 +148,7 @@ def cheese_strat(N, eps):
 # %%    
     
 # if __name__ == '__main__':
-util_models = [("sqrt", partial(pow_util, 1/2)), ("cbrt", partial(pow_util, 1/3)), ("lin", partial(pow_util, 1)), ("log", log_util), ("inv", partial(pow_util, -1))]
+util_models = [("sqrt", partial(pow_util, 1/2)), ("cbrt", partial(pow_util, 1/3)), ("lin", partial(pow_util, 1)), ("log", log_util)]
 lb_models = [10, 100, 500]
 num_runs = 20000
 # model = "lin"
@@ -170,14 +170,14 @@ gym.register(
 scores = {}
 for u in util_models:
     scores[u[0] + " util"] = infinite_gen(num_runs, u[0], u[1])
-for l in lb_models:
-    scores["lb " + str(l)] = infinite_lb(num_runs, l)
-    
+# for l in lb_models:
+#     scores["lb " + str(l)] = infinite_lb(num_runs, l)
+num_models = 4
 # %%    
-winrates = np.zeros((8, 8))
+winrates = np.zeros((num_models, num_models))
 models = list(scores.keys())
-for i in range(8):
-    for j in range(8):
+for i in range(num_models):
+    for j in range(num_models):
         iscore = scores[models[i]]
         jscore = scores[models[j]]
         for k in range(num_runs):
