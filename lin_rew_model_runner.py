@@ -35,7 +35,7 @@ def plot_log_scores(name, scores):
 
 def act(theta, state):
     a = 2
-    phis = utils.extract_features(state)
+    phis = utils.extract_lin_rew_features(state)
     dist = utils.compute_action_distribution(theta, phis)
     dist = np.reshape(dist, a)
     act = np.random.choice(np.arange(a), p=dist)
@@ -61,7 +61,7 @@ def infinite_gen(N, model, func):
     print("Infinite " + model + " Utility Stats")
     print("Average:", np.mean(scores))
     print("Std:", np.std(scores))
-    plot_log_scores(model, scores)
+    plot_scores(model, scores)
     return scores
 
 def piecewise_log_lin(N):
@@ -89,7 +89,7 @@ def piecewise_log_lin(N):
     print("Infinite Piecewise Utility Stats")
     print("Average:", np.mean(scores))
     print("Std:", np.std(scores))
-    plot_log_scores("Piecewise", scores)
+    plot_scores("Piecewise", scores)
     return scores
 
 def cheese_strat(N, eps):
@@ -154,7 +154,7 @@ if __name__ == '__main__':
         wins = [0] * len(other_scores)
         for j in range(len(other_scores)):
             for i in range(num_runs):
-                if log_scores[i] > other_scores[j][i]:
+                if lin_scores[i] > other_scores[j][i]:
                     wins[j] += 1
             print(wins[j] / num_runs)
     if model == "log":

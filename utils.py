@@ -5,6 +5,24 @@ from math import log
 
 rbf_feature = RBFSampler(gamma=1, random_state=12345)
 
+def extract_lb_features(state, lb):
+    """ This function computes the RFF features for a state for all the discrete actions
+
+    :param state: column vector of the state we want to compute phi(s,a) of (shape |S|x1)
+    :param num_actions: number of discrete actions you want to compute the RFF features for
+    :return: phi(s,a) for all the actions (shape 100x|num_actions|)
+    """
+    s0 = np.zeros((3, 1))
+    s1 = s0.copy()
+    p = state[1]
+    s1[0][0] = lb
+    s1[1][0] = p * state[2] + (1 - p) * state[3]
+    # s1[2][0] = (p * state[2] ** 2 + (1 - p) * state[3] ** 2) / state[0]
+    s1 /= state[0]
+    s1[2][0] = p * log (state[2] / state[0] + 1) + (1 - p) * log (state[3] / state[0] + 1 + 10 ** -5)
+    feats = np.concatenate((s0, s1), axis = -1)
+    return feats
+
 def extract_lin_rew_features(state):
     """ This function computes the RFF features for a state for all the discrete actions
 
@@ -19,7 +37,7 @@ def extract_lin_rew_features(state):
     s1[1][0] = p * state[2] + (1 - p) * state[3]
     # s1[2][0] = (p * state[2] ** 2 + (1 - p) * state[3] ** 2) / state[0]
     # s1 /= state[0]
-    s1[2][0] = p * log (state[2] / state[0] + 1) + (1 - p) * log (state[3] / state[0] + 1 + 10 ** -5)
+    s1[2][0] = (p * log (state[2] / state[0] + 1) + (1 - p) * log (state[3] / state[0] + 1 + 10 ** -5)) * state[0]
     feats = np.concatenate((s0, s1), axis = -1)
     return feats
 

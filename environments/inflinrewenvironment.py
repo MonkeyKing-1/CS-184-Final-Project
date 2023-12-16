@@ -2,7 +2,7 @@ import gym
 from gym import spaces
 import numpy as np
 import pygame
-from math import log
+from math import log, sqrt
 
 
 black = (0, 0, 0)
@@ -10,7 +10,7 @@ black = (0, 0, 0)
 def get_next_investment(position):
     # Most investments are likely to succeed(?)
     prob = np.random.beta(1, 1)
-    downside = -50 * np.random.beta(3, 2) * 0.5
+    downside = -5 * np.random.beta(3, 2) * 0.5
     upside = -downside * (1 - prob) / prob * (0.5 + 1.5 * np.random.uniform())
     return (position, prob, upside, downside)
 
